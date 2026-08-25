@@ -1,0 +1,1002 @@
+[
+    {
+        "node_id": 0,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.6415034532546997,
+        "anomaly_score": 0.2187156081199646,
+        "risk_score": 4.16,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 1,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.6286049485206604,
+        "anomaly_score": 0.21931995451450348,
+        "risk_score": 4.16,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 2,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.6409909129142761,
+        "anomaly_score": 0.2188749611377716,
+        "risk_score": 4.16,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 3,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.630473792552948,
+        "anomaly_score": 0.219042107462883,
+        "risk_score": 4.16,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 4,
+        "category": "KNOWN_ATTACK",
+        "detected_type": "Botnet",
+        "classifier_prob": 0.624094545841217,
+        "anomaly_score": 0.33631810545921326,
+        "risk_score": 38.14,
+        "severity": "MEDIUM",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 5,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.5765610933303833,
+        "anomaly_score": 0.4106777608394623,
+        "risk_score": 4.73,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 6,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.8031923174858093,
+        "anomaly_score": 0.8907957673072815,
+        "risk_score": 6.17,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 7,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.7239685654640198,
+        "anomaly_score": 0.9099161624908447,
+        "risk_score": 6.23,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 8,
+        "category": "KNOWN_ATTACK",
+        "detected_type": "Botnet",
+        "classifier_prob": 0.7616919875144958,
+        "anomaly_score": 0.09902583807706833,
+        "risk_score": 45.62,
+        "severity": "MEDIUM",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 9,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.8063596487045288,
+        "anomaly_score": 0.8967573046684265,
+        "risk_score": 6.19,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 10,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.892901599407196,
+        "anomaly_score": 0.8808048963546753,
+        "risk_score": 6.14,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 11,
+        "category": "KNOWN_ATTACK",
+        "detected_type": "Botnet",
+        "classifier_prob": 0.6899478435516357,
+        "anomaly_score": 0.3329158425331116,
+        "risk_score": 42.05,
+        "severity": "MEDIUM",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 12,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.5696923732757568,
+        "anomaly_score": 0.4035010039806366,
+        "risk_score": 4.71,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 13,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.7137272357940674,
+        "anomaly_score": 0.8990983963012695,
+        "risk_score": 6.2,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 14,
+        "category": "KNOWN_ATTACK",
+        "detected_type": "Botnet",
+        "classifier_prob": 0.624271810054779,
+        "anomaly_score": 0.3363158404827118,
+        "risk_score": 38.15,
+        "severity": "MEDIUM",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 15,
+        "category": "KNOWN_ATTACK",
+        "detected_type": "Botnet",
+        "classifier_prob": 0.7620978355407715,
+        "anomaly_score": 0.0991750955581665,
+        "risk_score": 45.64,
+        "severity": "MEDIUM",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 16,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.5754558444023132,
+        "anomaly_score": 0.4103141129016876,
+        "risk_score": 4.73,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 17,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.8064395785331726,
+        "anomaly_score": 0.8874134421348572,
+        "risk_score": 6.16,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 18,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.8077211976051331,
+        "anomaly_score": 0.8840677738189697,
+        "risk_score": 6.15,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 19,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.7232280969619751,
+        "anomaly_score": 0.9114993810653687,
+        "risk_score": 6.23,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 20,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.5995683670043945,
+        "anomaly_score": 1.2370829582214355,
+        "risk_score": 7.21,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 21,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.5471330881118774,
+        "anomaly_score": 0.520658552646637,
+        "risk_score": 5.06,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 22,
+        "category": "KNOWN_ATTACK",
+        "detected_type": "Botnet",
+        "classifier_prob": 0.6930416822433472,
+        "anomaly_score": 0.10712296515703201,
+        "risk_score": 41.56,
+        "severity": "MEDIUM",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 23,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.8138511776924133,
+        "anomaly_score": 0.875512957572937,
+        "risk_score": 6.13,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 24,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.7127882838249207,
+        "anomaly_score": 0.9204527139663696,
+        "risk_score": 6.26,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 25,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.5312437415122986,
+        "anomaly_score": 0.20744934678077698,
+        "risk_score": 4.12,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 26,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.640182614326477,
+        "anomaly_score": 0.2089359611272812,
+        "risk_score": 4.13,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 27,
+        "category": "KNOWN_ATTACK",
+        "detected_type": "Infiltration",
+        "classifier_prob": 0.6419954299926758,
+        "anomaly_score": 0.43884527683258057,
+        "risk_score": 44.01,
+        "severity": "MEDIUM",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 28,
+        "category": "KNOWN_ATTACK",
+        "detected_type": "Botnet",
+        "classifier_prob": 0.8436987400054932,
+        "anomaly_score": 0.3166385293006897,
+        "risk_score": 51.15,
+        "severity": "HIGH",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 29,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.8101984858512878,
+        "anomaly_score": 0.8767346739768982,
+        "risk_score": 6.13,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 30,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.5581198334693909,
+        "anomaly_score": 0.7493482828140259,
+        "risk_score": 5.75,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 31,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.8218094706535339,
+        "anomaly_score": 0.51859450340271,
+        "risk_score": 5.06,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 32,
+        "category": "KNOWN_ATTACK",
+        "detected_type": "Botnet",
+        "classifier_prob": 0.7199404835700989,
+        "anomaly_score": 0.10840986669063568,
+        "risk_score": 43.16,
+        "severity": "MEDIUM",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 33,
+        "category": "KNOWN_ATTACK",
+        "detected_type": "Infiltration",
+        "classifier_prob": 0.7831985354423523,
+        "anomaly_score": 0.8408138751983643,
+        "risk_score": 54.61,
+        "severity": "HIGH",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 34,
+        "category": "KNOWN_ATTACK",
+        "detected_type": "Botnet",
+        "classifier_prob": 0.8784399628639221,
+        "anomaly_score": 0.27445894479751587,
+        "risk_score": 53.09,
+        "severity": "HIGH",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 35,
+        "category": "KNOWN_ATTACK",
+        "detected_type": "PortScan",
+        "classifier_prob": 0.9834172129631042,
+        "anomaly_score": 0.32025614380836487,
+        "risk_score": 28.5,
+        "severity": "MEDIUM",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 36,
+        "category": "KNOWN_ATTACK",
+        "detected_type": "Brute Force",
+        "classifier_prob": 0.6273617148399353,
+        "anomaly_score": 0.21262401342391968,
+        "risk_score": 26.99,
+        "severity": "MEDIUM",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 37,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.589130163192749,
+        "anomaly_score": 0.8861963152885437,
+        "risk_score": 6.16,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 38,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.905565083026886,
+        "anomaly_score": 0.6587677597999573,
+        "risk_score": 5.48,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 39,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.5893904566764832,
+        "anomaly_score": 0.8858745098114014,
+        "risk_score": 6.16,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 40,
+        "category": "KNOWN_ATTACK",
+        "detected_type": "PortScan",
+        "classifier_prob": 0.9780313372612,
+        "anomaly_score": 0.3193144202232361,
+        "risk_score": 28.34,
+        "severity": "MEDIUM",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 41,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.587957501411438,
+        "anomaly_score": 0.8864114284515381,
+        "risk_score": 6.16,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 42,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.8966326117515564,
+        "anomaly_score": 0.6271999478340149,
+        "risk_score": 5.38,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 43,
+        "category": "KNOWN_ATTACK",
+        "detected_type": "Botnet",
+        "classifier_prob": 0.877530038356781,
+        "anomaly_score": 0.27575603127479553,
+        "risk_score": 53.04,
+        "severity": "HIGH",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 44,
+        "category": "KNOWN_ATTACK",
+        "detected_type": "PortScan",
+        "classifier_prob": 0.934260368347168,
+        "anomaly_score": 0.31930774450302124,
+        "risk_score": 27.12,
+        "severity": "MEDIUM",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 45,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.693219780921936,
+        "anomaly_score": 0.8540787696838379,
+        "risk_score": 6.06,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 46,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.9433260560035706,
+        "anomaly_score": 0.7671440839767456,
+        "risk_score": 5.8,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 47,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.6322059631347656,
+        "anomaly_score": 0.9036418199539185,
+        "risk_score": 6.21,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 48,
+        "category": "KNOWN_ATTACK",
+        "detected_type": "PortScan",
+        "classifier_prob": 0.9498069882392883,
+        "anomaly_score": 0.31057724356651306,
+        "risk_score": 27.53,
+        "severity": "MEDIUM",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 49,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.6769216656684875,
+        "anomaly_score": 0.8612484931945801,
+        "risk_score": 6.08,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 50,
+        "category": "KNOWN_ATTACK",
+        "detected_type": "PortScan",
+        "classifier_prob": 0.8982329368591309,
+        "anomaly_score": 0.3263590931892395,
+        "risk_score": 26.13,
+        "severity": "MEDIUM",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 51,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.6752303838729858,
+        "anomaly_score": 0.9133296012878418,
+        "risk_score": 6.24,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 52,
+        "category": "KNOWN_ATTACK",
+        "detected_type": "PortScan",
+        "classifier_prob": 0.9400668740272522,
+        "anomaly_score": 0.3214673101902008,
+        "risk_score": 27.29,
+        "severity": "MEDIUM",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 53,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.8464922904968262,
+        "anomaly_score": 0.7959417700767517,
+        "risk_score": 5.89,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 54,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.8495370745658875,
+        "anomaly_score": 0.5651647448539734,
+        "risk_score": 5.2,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 55,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.8498592376708984,
+        "anomaly_score": 0.5556819438934326,
+        "risk_score": 5.17,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 56,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.7640143036842346,
+        "anomaly_score": 0.6219489574432373,
+        "risk_score": 5.37,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 57,
+        "category": "KNOWN_ATTACK",
+        "detected_type": "Infiltration",
+        "classifier_prob": 0.881903350353241,
+        "anomaly_score": 1.2681673765182495,
+        "risk_score": 62.45,
+        "severity": "HIGH",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 58,
+        "category": "KNOWN_ATTACK",
+        "detected_type": "Botnet",
+        "classifier_prob": 0.8591886162757874,
+        "anomaly_score": 0.2984055280685425,
+        "risk_score": 52.02,
+        "severity": "HIGH",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 59,
+        "category": "KNOWN_ATTACK",
+        "detected_type": "DoS",
+        "classifier_prob": 0.41568616032600403,
+        "anomaly_score": 0.5965470671653748,
+        "risk_score": 26.29,
+        "severity": "MEDIUM",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 60,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.6000475287437439,
+        "anomaly_score": 0.8779256343841553,
+        "risk_score": 6.13,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 61,
+        "category": "KNOWN_ATTACK",
+        "detected_type": "PortScan",
+        "classifier_prob": 0.9492902159690857,
+        "anomaly_score": 0.31190264225006104,
+        "risk_score": 27.52,
+        "severity": "MEDIUM",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 62,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.8552005290985107,
+        "anomaly_score": 0.7549137473106384,
+        "risk_score": 5.76,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 63,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.6686272621154785,
+        "anomaly_score": 0.7555363178253174,
+        "risk_score": 5.77,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 64,
+        "category": "KNOWN_ATTACK",
+        "detected_type": "Brute Force",
+        "classifier_prob": 0.4858922064304352,
+        "anomaly_score": 0.21365401148796082,
+        "risk_score": 21.64,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 65,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.8549621105194092,
+        "anomaly_score": 1.275740385055542,
+        "risk_score": 7.33,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 66,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.48642751574516296,
+        "anomaly_score": 0.24642091989517212,
+        "risk_score": 4.24,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 67,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.4646683633327484,
+        "anomaly_score": 0.2314513623714447,
+        "risk_score": 4.19,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 68,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.6429345011711121,
+        "anomaly_score": 0.22174213826656342,
+        "risk_score": 4.17,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 69,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.41441431641578674,
+        "anomaly_score": 0.3059731125831604,
+        "risk_score": 4.42,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 70,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.6438416242599487,
+        "anomaly_score": 0.2187989205121994,
+        "risk_score": 4.16,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 71,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.6426173448562622,
+        "anomaly_score": 0.22175611555576324,
+        "risk_score": 4.17,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 72,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.6422640085220337,
+        "anomaly_score": 0.2193237543106079,
+        "risk_score": 4.16,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 73,
+        "category": "KNOWN_ATTACK",
+        "detected_type": "Web Attack",
+        "classifier_prob": 0.9767550826072693,
+        "anomaly_score": 0.1774948537349701,
+        "risk_score": 62.07,
+        "severity": "HIGH",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 74,
+        "category": "KNOWN_ATTACK",
+        "detected_type": "PortScan",
+        "classifier_prob": 0.9110525250434875,
+        "anomaly_score": 0.4489119052886963,
+        "risk_score": 26.86,
+        "severity": "MEDIUM",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 75,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.9875754117965698,
+        "anomaly_score": 1.0719785690307617,
+        "risk_score": 6.72,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 76,
+        "category": "KNOWN_ATTACK",
+        "detected_type": "PortScan",
+        "classifier_prob": 0.9897184371948242,
+        "anomaly_score": 0.28888800740242004,
+        "risk_score": 28.58,
+        "severity": "MEDIUM",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 77,
+        "category": "KNOWN_ATTACK",
+        "detected_type": "PortScan",
+        "classifier_prob": 0.9897069931030273,
+        "anomaly_score": 0.28884461522102356,
+        "risk_score": 28.58,
+        "severity": "MEDIUM",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 78,
+        "category": "KNOWN_ATTACK",
+        "detected_type": "PortScan",
+        "classifier_prob": 0.8291709423065186,
+        "anomaly_score": 0.4235859513282776,
+        "risk_score": 24.49,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 79,
+        "category": "KNOWN_ATTACK",
+        "detected_type": "Web Attack",
+        "classifier_prob": 0.9638495445251465,
+        "anomaly_score": 0.2609921991825104,
+        "risk_score": 61.51,
+        "severity": "HIGH",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 80,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.589282214641571,
+        "anomaly_score": 0.8917542099952698,
+        "risk_score": 6.18,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 81,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.8541801571846008,
+        "anomaly_score": 1.8171628713607788,
+        "risk_score": 8.95,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 82,
+        "category": "KNOWN_ATTACK",
+        "detected_type": "Botnet",
+        "classifier_prob": 0.6598405241966248,
+        "anomaly_score": 0.10236559063196182,
+        "risk_score": 39.57,
+        "severity": "MEDIUM",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 83,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.9116005897521973,
+        "anomaly_score": 1.1715360879898071,
+        "risk_score": 7.01,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 84,
+        "category": "KNOWN_ATTACK",
+        "detected_type": "Botnet",
+        "classifier_prob": 0.5388711094856262,
+        "anomaly_score": 0.14232780039310455,
+        "risk_score": 32.49,
+        "severity": "MEDIUM",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 85,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.8612650632858276,
+        "anomaly_score": 1.3116875886917114,
+        "risk_score": 7.44,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 86,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.9548614621162415,
+        "anomaly_score": 0.9301161766052246,
+        "risk_score": 6.29,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 87,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.9856287240982056,
+        "anomaly_score": 1.2714861631393433,
+        "risk_score": 7.31,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 88,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.9857813715934753,
+        "anomaly_score": 1.2779914140701294,
+        "risk_score": 7.33,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 89,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.9835422039031982,
+        "anomaly_score": 1.4890025854110718,
+        "risk_score": 7.97,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 90,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.9844712615013123,
+        "anomaly_score": 1.3099727630615234,
+        "risk_score": 7.43,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 91,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.9850217700004578,
+        "anomaly_score": 1.2943003177642822,
+        "risk_score": 7.38,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 92,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.9872626662254333,
+        "anomaly_score": 1.0839247703552246,
+        "risk_score": 6.75,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 93,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.9858578443527222,
+        "anomaly_score": 1.2840522527694702,
+        "risk_score": 7.35,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 94,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.985335111618042,
+        "anomaly_score": 1.3023357391357422,
+        "risk_score": 7.41,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 95,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.9857585430145264,
+        "anomaly_score": 1.2925606966018677,
+        "risk_score": 7.38,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 96,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.9857091903686523,
+        "anomaly_score": 1.2830315828323364,
+        "risk_score": 7.35,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 97,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.7389734387397766,
+        "anomaly_score": 0.9472250938415527,
+        "risk_score": 6.34,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 98,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.9856518507003784,
+        "anomaly_score": 1.2991414070129395,
+        "risk_score": 7.4,
+        "severity": "LOW",
+        "is_anomalous": false
+    },
+    {
+        "node_id": 99,
+        "category": "BENIGN",
+        "detected_type": "BENIGN",
+        "classifier_prob": 0.9856093525886536,
+        "anomaly_score": 1.300267219543457,
+        "risk_score": 7.4,
+        "severity": "LOW",
+        "is_anomalous": false
+    }
+]

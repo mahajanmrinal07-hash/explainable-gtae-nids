@@ -1,0 +1,220 @@
+{
+    "dataset": "CIC-IDS2017 (Real)",
+    "model_type": "RandomForestClassifier (Balanced Subsample)",
+    "mode": "multiclass",
+    "n_samples_total": 335632,
+    "n_samples_train": 234941,
+    "n_samples_val": 33564,
+    "n_samples_test": 67127,
+    "num_features": 67,
+    "feature_names": [
+        "Protocol",
+        "Flow Duration",
+        "Total Fwd Packets",
+        "Total Backward Packets",
+        "Fwd Packets Length Total",
+        "Bwd Packets Length Total",
+        "Fwd Packet Length Max",
+        "Fwd Packet Length Min",
+        "Fwd Packet Length Mean",
+        "Fwd Packet Length Std",
+        "Bwd Packet Length Max",
+        "Bwd Packet Length Min",
+        "Bwd Packet Length Mean",
+        "Bwd Packet Length Std",
+        "Flow Bytes/s",
+        "Flow Packets/s",
+        "Flow IAT Mean",
+        "Flow IAT Std",
+        "Flow IAT Max",
+        "Flow IAT Min",
+        "Fwd IAT Total",
+        "Fwd IAT Mean",
+        "Fwd IAT Std",
+        "Fwd IAT Max",
+        "Fwd IAT Min",
+        "Bwd IAT Total",
+        "Bwd IAT Mean",
+        "Bwd IAT Std",
+        "Bwd IAT Max",
+        "Bwd IAT Min",
+        "Fwd PSH Flags",
+        "Fwd Header Length",
+        "Bwd Header Length",
+        "Fwd Packets/s",
+        "Bwd Packets/s",
+        "Packet Length Min",
+        "Packet Length Max",
+        "Packet Length Mean",
+        "Packet Length Std",
+        "Packet Length Variance",
+        "FIN Flag Count",
+        "SYN Flag Count",
+        "RST Flag Count",
+        "PSH Flag Count",
+        "ACK Flag Count",
+        "URG Flag Count",
+        "ECE Flag Count",
+        "Down/Up Ratio",
+        "Avg Packet Size",
+        "Avg Fwd Segment Size",
+        "Avg Bwd Segment Size",
+        "Subflow Fwd Packets",
+        "Subflow Fwd Bytes",
+        "Subflow Bwd Packets",
+        "Subflow Bwd Bytes",
+        "Init Fwd Win Bytes",
+        "Init Bwd Win Bytes",
+        "Fwd Act Data Packets",
+        "Fwd Seg Size Min",
+        "Active Mean",
+        "Active Std",
+        "Active Max",
+        "Active Min",
+        "Idle Mean",
+        "Idle Std",
+        "Idle Max",
+        "Idle Min"
+    ],
+    "classes": [
+        "BENIGN",
+        "DoS",
+        "DDoS",
+        "PortScan",
+        "Brute Force",
+        "Botnet",
+        "Web Attack",
+        "Infiltration"
+    ],
+    "accuracy": 0.99645,
+    "precision_macro": 0.93738,
+    "recall_macro": 0.95411,
+    "f1_macro": 0.94275,
+    "precision_weighted": 0.99689,
+    "recall_weighted": 0.99645,
+    "f1_weighted": 0.99659,
+    "per_class_metrics": {
+        "BENIGN": {
+            "precision": 0.99693,
+            "recall": 0.9919,
+            "f1_score": 0.99441
+        },
+        "DoS": {
+            "precision": 0.99839,
+            "recall": 0.99864,
+            "f1_score": 0.99851
+        },
+        "DDoS": {
+            "precision": 0.9998,
+            "recall": 0.99955,
+            "f1_score": 0.99967
+        },
+        "PortScan": {
+            "precision": 0.98715,
+            "recall": 0.9821,
+            "f1_score": 0.98462
+        },
+        "Brute Force": {
+            "precision": 0.99781,
+            "recall": 0.99508,
+            "f1_score": 0.99644
+        },
+        "Botnet": {
+            "precision": 0.711,
+            "recall": 0.96528,
+            "f1_score": 0.81885
+        },
+        "Web Attack": {
+            "precision": 0.97465,
+            "recall": 0.98601,
+            "f1_score": 0.9803
+        },
+        "Infiltration": {
+            "precision": 0.83333,
+            "recall": 0.71429,
+            "f1_score": 0.76923
+        }
+    },
+    "confusion_matrix": [
+        [
+            19838,
+            34,
+            4,
+            2,
+            3,
+            113,
+            5,
+            1
+        ],
+        [
+            27,
+            24149,
+            0,
+            3,
+            0,
+            0,
+            3,
+            0
+        ],
+        [
+            9,
+            0,
+            19991,
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        [
+            1,
+            2,
+            0,
+            384,
+            1,
+            0,
+            3,
+            0
+        ],
+        [
+            7,
+            2,
+            0,
+            0,
+            1821,
+            0,
+            0,
+            0
+        ],
+        [
+            10,
+            0,
+            0,
+            0,
+            0,
+            278,
+            0,
+            0
+        ],
+        [
+            5,
+            1,
+            0,
+            0,
+            0,
+            0,
+            423,
+            0
+        ],
+        [
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            5
+        ]
+    ]
+}

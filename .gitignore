@@ -1,0 +1,50 @@
+# Python Virtual Environment
+.venv/
+env/
+venv/
+ENV/
+
+# Python Cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+
+# Data Files (preserve raw and large processed artifacts)
+data/raw/*.parquet
+data/raw/*.csv
+data/processed/*.parquet
+data/processed/*.csv
+data/samples/*.parquet
+
+# Model weights and artifacts
+models/*.joblib
+models/*.pt
+models/*.pth
+models/*.pkl
+
+# Results and Plots
+results/figures/*.png
+results/metrics/*.json
+results/metrics/*.txt
+
+# Jupyter Notebook Checkpoints
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/*
+
+# IDE and OS
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Portable Git installer (downloaded for push, not part of project)
+PortableGit.exe
+PortableGit/
+pytest_output.txt

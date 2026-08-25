@@ -1,0 +1,257 @@
+{
+    "dataset": "CIC-IDS2017 (Real)",
+    "model_name": "GTAE-IDS (Graph Transformer Autoencoder)",
+    "execution_device": "cuda",
+    "training_time_sec": 22.28,
+    "total_flows": 68802,
+    "train_flows": 48160,
+    "val_flows": 6881,
+    "test_flows": 13761,
+    "num_features": 67,
+    "classes": [
+        "BENIGN",
+        "DoS",
+        "DDoS",
+        "PortScan",
+        "Brute Force",
+        "Botnet",
+        "Web Attack",
+        "Infiltration"
+    ],
+    "classification_metrics": {
+        "accuracy": 0.9324903713392922,
+        "precision_macro": 0.7423289989282704,
+        "recall_macro": 0.9535246936725608,
+        "f1_macro": 0.7940898498541124,
+        "precision_weighted": 0.9521872676320363,
+        "recall_weighted": 0.9324903713392922,
+        "f1_weighted": 0.9379597810367053,
+        "per_class": {
+            "BENIGN": {
+                "precision": 0.9864261807363333,
+                "recall": 0.8841666666666667,
+                "f1-score": 0.9325013183336263,
+                "support": 6000
+            },
+            "DoS": {
+                "precision": 0.9768683274021353,
+                "recall": 0.9602698650674663,
+                "f1-score": 0.9684979838709677,
+                "support": 4002
+            },
+            "DDoS": {
+                "precision": 0.9755859375,
+                "recall": 0.999,
+                "f1-score": 0.9871541501976284,
+                "support": 1000
+            },
+            "PortScan": {
+                "precision": 0.7766393442622951,
+                "recall": 0.969309462915601,
+                "f1-score": 0.8623435722411832,
+                "support": 391
+            },
+            "Brute Force": {
+                "precision": 0.9491017964071856,
+                "recall": 0.9641119221411192,
+                "f1-score": 0.9565479782739892,
+                "support": 1644
+            },
+            "Botnet": {
+                "precision": 0.5026269702276708,
+                "recall": 0.9965277777777778,
+                "f1-score": 0.6682188591385332,
+                "support": 288
+            },
+            "Web Attack": {
+                "precision": 0.6761453396524486,
+                "recall": 0.9976689976689976,
+                "f1-score": 0.8060263653483992,
+                "support": 429
+            },
+            "Infiltration": {
+                "precision": 0.09523809523809523,
+                "recall": 0.8571428571428571,
+                "f1-score": 0.17142857142857143,
+                "support": 7
+            }
+        },
+        "confusion_matrix": [
+            [
+                5305,
+                86,
+                9,
+                66,
+                78,
+                251,
+                148,
+                57
+            ],
+            [
+                63,
+                3843,
+                12,
+                38,
+                7,
+                33,
+                6,
+                0
+            ],
+            [
+                1,
+                0,
+                999,
+                0,
+                0,
+                0,
+                0,
+                0
+            ],
+            [
+                2,
+                1,
+                4,
+                379,
+                0,
+                0,
+                5,
+                0
+            ],
+            [
+                5,
+                3,
+                0,
+                5,
+                1585,
+                0,
+                46,
+                0
+            ],
+            [
+                1,
+                0,
+                0,
+                0,
+                0,
+                287,
+                0,
+                0
+            ],
+            [
+                1,
+                0,
+                0,
+                0,
+                0,
+                0,
+                428,
+                0
+            ],
+            [
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                0,
+                6
+            ]
+        ]
+    },
+    "anomaly_detection_metrics": {
+        "anomaly_threshold": 1.1886383295059204,
+        "anomaly_percentile": 95.0,
+        "benign_false_positive_rate": 0.047,
+        "known_attack_detection_rate": 0.006442468754026543,
+        "heldout_attack_class": null,
+        "heldout_attack_detection_rate": null,
+        "reconstruction_error_statistics": {
+            "BENIGN": {
+                "mean": 0.3348240256309509,
+                "std": 0.3516273498535156,
+                "median": 0.2182200402021408,
+                "max": 2.2391068935394287,
+                "min": 0.011452293954789639,
+                "count": 6000
+            },
+            "DoS": {
+                "mean": 0.4472123682498932,
+                "std": 0.2709641754627228,
+                "median": 0.397302508354187,
+                "max": 2.3469479084014893,
+                "min": 0.04057329148054123,
+                "count": 4002
+            },
+            "DDoS": {
+                "mean": 0.24225378036499023,
+                "std": 0.23090428113937378,
+                "median": 0.1617448329925537,
+                "max": 1.114487886428833,
+                "min": 0.01566207781434059,
+                "count": 1000
+            },
+            "PortScan": {
+                "mean": 0.2981207072734833,
+                "std": 0.260763019323349,
+                "median": 0.22201460599899292,
+                "max": 1.3063280582427979,
+                "min": 0.08693365007638931,
+                "count": 391
+            },
+            "Brute Force": {
+                "mean": 0.036350782960653305,
+                "std": 0.034949664026498795,
+                "median": 0.026271695271134377,
+                "max": 0.32850053906440735,
+                "min": 0.008243425749242306,
+                "count": 1644
+            },
+            "Botnet": {
+                "mean": 0.23754508793354034,
+                "std": 0.3473122715950012,
+                "median": 0.13137447834014893,
+                "max": 2.2769973278045654,
+                "min": 0.04571927711367607,
+                "count": 288
+            },
+            "Web Attack": {
+                "mean": 0.14624899625778198,
+                "std": 0.2400459349155426,
+                "median": 0.08783858269453049,
+                "max": 1.6012489795684814,
+                "min": 0.08656948804855347,
+                "count": 429
+            },
+            "Infiltration": {
+                "mean": 1.4388004541397095,
+                "std": 0.5883767008781433,
+                "median": 1.235076665878296,
+                "max": 2.158641815185547,
+                "min": 0.5499778985977173,
+                "count": 7
+            }
+        }
+    },
+    "configuration": {
+        "model_architecture": "GTAE_IDS",
+        "encoder_type": "transformer",
+        "in_features": 67,
+        "num_classes": 8,
+        "hidden_dim": 128,
+        "latent_dim": 64,
+        "num_heads": 4,
+        "num_encoder_layers": 2,
+        "dropout": 0.2,
+        "loss_type": "smooth_l1",
+        "lambda_rec": 0.5,
+        "training_mode": "supervised_hybrid",
+        "graph_size": 1000,
+        "k_neighbors": 5,
+        "epochs": 5,
+        "learning_rate": 0.001,
+        "anomaly_percentile": 95.0,
+        "anomaly_threshold": 1.1886383295059204,
+        "holdout_class": null
+    }
+}

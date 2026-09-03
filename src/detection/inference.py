@@ -1,4 +1,4 @@
-"""
+﻿"""
 Unified Inference API for XAI-NIDS.
 Loads GTAE checkpoint and preprocessor for end-to-end inference.
 """
@@ -24,7 +24,7 @@ class InferenceAPI:
         self,
         model_path: Union[str, Path],
         preprocessor_path: Union[str, Path],
-        anomaly_threshold: float = 2.0,
+        anomaly_threshold: float = 1.188638,
         confidence_threshold: float = 0.6,
         device: str = GPU_CONFIG["device"]
     ):
@@ -85,3 +85,4 @@ class InferenceAPI:
         results = self.detector.detect_batch(preds, probs, anomaly_scores)
 
         return results
+

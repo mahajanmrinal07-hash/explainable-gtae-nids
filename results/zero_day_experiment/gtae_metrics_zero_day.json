@@ -1,0 +1,16 @@
+﻿{
+    "experiment": "Zero-Day / Held-Out Attack Evaluation",
+    "heldout_attack": "Infiltration",
+    "test_samples": 7,
+    "detected_as_anomaly": 4,
+    "detection_rate": 0.5714,
+    "anomaly_threshold": 4.360150337219238,
+    "benign_false_positive_rate": 0.0468,
+    "overall_accuracy": 0.9479,
+    "macro_precision": 0.8619,
+    "macro_recall": 0.9729,
+    "macro_f1": 0.9042,
+    "weighted_f1": 0.9507,
+    "training_epochs": 5,
+    "holdout_class": "Infiltration"
+}

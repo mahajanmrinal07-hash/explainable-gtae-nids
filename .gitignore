@@ -20,7 +20,9 @@ data/samples/*.parquet
 
 # Model weights and artifacts
 models/*.joblib
+!models/preprocessor.joblib
 models/*.pt
+!models/gtae_ids.pt
 models/*.pth
 models/*.pkl
 

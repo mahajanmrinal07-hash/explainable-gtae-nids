@@ -30,24 +30,46 @@ def test_detector_benign_anomalous():
     assert results[0]["detected_type"] == "UNKNOWN_NOVEL"
     assert results[0]["is_anomalous"]
 
-def test_detector_known_attack_high_conf():
+def test_detector_known_attack_high_conf_anomalous():
     detector = IntrusionDetector()
     preds = np.array([1]) # DoS
-    probs = np.array([[0.1, 0.8, 0.1, 0.0, 0.0, 0.0, 0.0, 0.0]])
-    anomaly = np.array([3.0]) 
+    probs = np.array([[0.1, 0.8, 0.1, 0.0, 0.0, 0.0, 0.0, 0.0]]) # prob=0.8 >= 0.6
+    anomaly = np.array([3.0]) # err=3.0 > 2.0
     
     results = detector.detect_batch(preds, probs, anomaly)
     assert results[0]["category"] == "KNOWN_ATTACK"
     assert results[0]["detected_type"] == "DoS"
     assert results[0]["is_anomalous"]
 
+def test_detector_known_attack_high_conf_normal_anomaly():
+    detector = IntrusionDetector()
+    preds = np.array([1]) # DoS
+    probs = np.array([[0.1, 0.8, 0.1, 0.0, 0.0, 0.0, 0.0, 0.0]]) # prob=0.8 >= 0.6
+    anomaly = np.array([0.5]) # err=0.5 <= 2.0
+    
+    results = detector.detect_batch(preds, probs, anomaly)
+    assert results[0]["category"] == "KNOWN_ATTACK"
+    assert results[0]["detected_type"] == "DoS"
+    assert not results[0]["is_anomalous"]
+
 def test_detector_known_attack_low_conf_anomalous():
     detector = IntrusionDetector()
     preds = np.array([1]) # DoS
     probs = np.array([[0.4, 0.5, 0.1, 0.0, 0.0, 0.0, 0.0, 0.0]]) # prob=0.5 < 0.6
-    anomaly = np.array([3.0]) # High anomaly -> Novel variant
+    anomaly = np.array([3.0]) # err=3.0 > 2.0 (High anomaly -> UNKNOWN_NOVEL)
     
     results = detector.detect_batch(preds, probs, anomaly)
     assert results[0]["category"] == "UNKNOWN_NOVEL"
     assert results[0]["detected_type"] == "UNKNOWN_NOVEL"
     assert results[0]["is_anomalous"]
+
+def test_detector_known_attack_low_conf_normal_anomaly():
+    detector = IntrusionDetector()
+    preds = np.array([1]) # DoS
+    probs = np.array([[0.4, 0.5, 0.1, 0.0, 0.0, 0.0, 0.0, 0.0]]) # prob=0.5 < 0.6
+    anomaly = np.array([0.5]) # err=0.5 <= 2.0 (Normal anomaly -> BENIGN)
+    
+    results = detector.detect_batch(preds, probs, anomaly)
+    assert results[0]["category"] == "BENIGN"
+    assert results[0]["detected_type"] == "BENIGN"
+    assert not results[0]["is_anomalous"]

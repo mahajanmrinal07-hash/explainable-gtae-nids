@@ -185,6 +185,7 @@ class GTAE_IDS(nn.Module):
         lambda_rec: Optional[float] = None,
         training_mode: str = "supervised_hybrid",
         classification_mask: Optional[torch.Tensor] = None,
+        reconstruction_mask: Optional[torch.Tensor] = None,
     ) -> Dict[str, torch.Tensor]:
         """
         Computes hybrid multi-task loss.
@@ -207,6 +208,10 @@ class GTAE_IDS(nn.Module):
         classification_mask : Optional[torch.Tensor] of shape (N,)
             Boolean mask indicating which nodes should contribute to classification loss
             (e.g., to exclude held-out novel attack classes from training).
+        reconstruction_mask : Optional[torch.Tensor] of shape (N,)
+            Boolean mask indicating which nodes should contribute to reconstruction loss.
+            Used by held-out attack experiments to exclude the held-out class from
+            reconstruction learning.
 
         Returns
         -------
@@ -217,15 +222,33 @@ class GTAE_IDS(nn.Module):
 
         # 1. Reconstruction Loss
         x_hat = outputs["reconstruction"]
+
         if training_mode == "benign_autoencoder" and y is not None:
             benign_mask = (y == 0)
-            rec_loss = self.autoencoder.compute_loss(x, x_hat, mask=benign_mask)
+            rec_loss = self.autoencoder.compute_loss(
+                x,
+                x_hat,
+                mask=benign_mask,
+            )
+
+        elif reconstruction_mask is not None:
+            rec_loss = self.autoencoder.compute_loss(
+                x,
+                x_hat,
+                mask=reconstruction_mask,
+            )
+
         else:
-            rec_loss = self.autoencoder.compute_loss(x, x_hat, mask=None)
+            rec_loss = self.autoencoder.compute_loss(
+                x,
+                x_hat,
+                mask=None,
+            )
 
         # 2. Classification Loss
         if y is not None:
             logits = outputs["classification_logits"]
+
             if classification_mask is not None:
                 if classification_mask.sum() > 0:
                     cls_loss = F.cross_entropy(
@@ -234,11 +257,22 @@ class GTAE_IDS(nn.Module):
                         weight=class_weights,
                     )
                 else:
-                    cls_loss = torch.tensor(0.0, device=x.device, requires_grad=True)
+                    cls_loss = torch.tensor(
+                        0.0,
+                        device=x.device,
+                        requires_grad=True,
+                    )
             else:
-                cls_loss = F.cross_entropy(logits, y, weight=class_weights)
+                cls_loss = F.cross_entropy(
+                    logits,
+                    y,
+                    weight=class_weights,
+                )
         else:
-            cls_loss = torch.tensor(0.0, device=x.device)
+            cls_loss = torch.tensor(
+                0.0,
+                device=x.device,
+            )
 
         total_loss = cls_loss + (lam * rec_loss)
 
@@ -320,7 +354,11 @@ class GTAE_IDS(nn.Module):
         if not path.exists():
             raise FileNotFoundError(f"Checkpoint not found at: {path}")
 
-        checkpoint = torch.load(str(path), map_location=map_location or "cpu", weights_only=False)
+        checkpoint = torch.load(
+            str(path),
+            map_location=map_location or "cpu",
+            weights_only=False,
+        )
         config = checkpoint.get("config", {})
         model = cls(**config)
         model.load_state_dict(checkpoint["state_dict"])

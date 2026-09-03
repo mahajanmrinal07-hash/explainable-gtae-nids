@@ -73,10 +73,15 @@ class IntrusionDetector:
                     detected_type = "BENIGN"
             else:
                 # Classified as an attack
-                if prob < self.confidence_threshold and is_anomalous:
-                    # Low confidence in known attack, but high anomaly -> Novel variant
-                    category = "UNKNOWN_NOVEL"
-                    detected_type = "UNKNOWN_NOVEL"
+                if prob < self.confidence_threshold:
+                    if is_anomalous:
+                        # Low confidence in known attack, but high anomaly -> Novel variant
+                        category = "UNKNOWN_NOVEL"
+                        detected_type = "UNKNOWN_NOVEL"
+                    else:
+                        # Low confidence in known attack + normal reconstruction error -> BENIGN
+                        category = "BENIGN"
+                        detected_type = "BENIGN"
                 else:
                     category = "KNOWN_ATTACK"
                     detected_type = pred_name

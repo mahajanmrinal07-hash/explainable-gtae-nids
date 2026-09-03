@@ -1,145 +1,103 @@
-# XAI-NIDS: Explainable Graph-Based Intelligent Network Intrusion Detection System
+# XAI-NIDS: Explainable Graph-Based Network Intrusion Detection System
 
-[![Python 3.11](https://img.shields.io/badge/python-3.11-blue.svg)](https://www.python.org/downloads/release/python-3119/)
-[![PyTorch 2.6+cu124](https://img.shields.io/badge/PyTorch-2.6%2Bcu124-red.svg)](https://pytorch.org/)
-[![CUDA 12.4](https://img.shields.io/badge/CUDA-12.4-green.svg)](https://developer.nvidia.com/cuda-zone)
-[![PyG 2.8](https://img.shields.io/badge/PyTorch_Geometric-2.8-purple.svg)](https://pyg.org/)
+XAI-NIDS is a professional, end-to-end Network Intrusion Detection System built for evaluating the CIC-IDS2017 dataset. It integrates Graph Transformer Autoencoders (GTAE-IDS) with Explainable AI (XAI) to provide both highly accurate threat detection and transparent, feature-level insights into its decisions.
 
----
+## Architecture
 
-## 📌 Project Overview
+The project pipeline consists of:
+1. **Preprocessing Layer:** Scales numerical network-flow features and builds a k-NN similarity graph from raw traffic.
+2. **GTAE-IDS (Graph Transformer Autoencoder):** 
+   - Uses a supervised classification head to identify known attack families.
+   - Uses an unsupervised reconstruction decoder to detect novel/zero-day threats as anomalies.
+3. **Risk Engine:** Computes an aggregated risk score based on anomaly severity and classification confidence.
+4. **XAI Engine:** Applies reconstruction feature importance, feature ablation, and neighborhood analysis to explain predictions.
+5. **Interactive Dashboard:** A professional Streamlit application that visualizes threats, flow explanations, and evaluation metrics.
 
-**XAI-NIDS** (*Explainable Graph-Based Intelligent Network Intrusion Detection and Threat Analysis System*) is a research prototype inspired by the **GTAE-IDS** framework (*Graph Transformer-Based Autoencoder Framework for Real-Time Network Intrusion Detection*).
+## Methodology
 
-The system addresses critical challenges in modern network security:
-1. **Graph Topological Context**: Encodes spatial and relational host communications using Graph Neural Networks and Graph Transformers.
-2. **Reconstruction-Based Threat Detection**: Identifies subtle, zero-day, and multi-vector anomalies via autoencoder reconstruction error.
-3. **Transparent Explainability (XAI)**: Attributes threat decisions through GNNExplainer, SHAP, and attention mechanisms.
-4. **Hardware Optimized**: Tuned specifically for resource-efficient execution on a **6 GB RTX 3060 Laptop GPU** with PyTorch CUDA 12.4.
+**GTAE-IDS** uses a dual-objective training approach (Supervised Hybrid):
+- **Classification Loss (Cross-Entropy):** Optimizes the latent representation to separate known attack classes (e.g., DoS, DDoS, Botnet, PortScan, Brute Force, Web Attack).
+- **Reconstruction Loss (Smooth L1):** Forces the model to reconstruct normal traffic behavior, isolating out-of-distribution novel attacks that fail to reconstruct properly.
 
----
+## Dataset Information
 
-## 📂 Project Architecture
+This project relies on the **CIC-IDS2017** dataset, containing realistic background traffic and updated attack profiles. 
+- **Predictable Classes:** 8 (BENIGN + 7 attack families)
+- **Input Features:** 67 numerical network flow features
 
+> [!IMPORTANT]  
+> **Raw Dataset Not Included:** Due to size constraints, the raw CIC-IDS2017 `.parquet` or `.csv` files are **not included** in this repository. You must obtain them separately and place them in the `data/raw/cicids2017/` directory to run inference on new flows.
+
+## Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-username/xai-nids.git
+   cd xai-nids
+   ```
+2. Create and activate a virtual environment:
+   ```bash
+   python -m venv .venv
+   # Windows
+   .venv\Scripts\activate
+   # Linux/Mac
+   source .venv/bin/activate
+   ```
+3. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+## Usage
+
+### Launching the Dashboard
+
+The dashboard provides the main user interface for the NIDS:
+```bash
+python -m streamlit run dashboard/app.py
 ```
-XAI-NIDS/
-├── data/
-│   ├── raw/                # Original CIC-IDS2017 Parquet dataset files
-│   ├── processed/          # Preprocessed, scaled, and feature-engineered datasets
-│   └── samples/            # Verified synthetic sample datasets for testing and CI
-├── src/
-│   ├── __init__.py
-│   ├── config.py           # Project constants, paths, and GPU guardrails
-│   ├── data_loader.py      # Dataset discovery, schema inspection, and chunked loading
-│   ├── preprocessing.py    # Leakage-free scalers, imputers, and label normalization
-│   ├── graph_builder.py    # [Phase 2] Flow-to-Graph conversion pipeline
-│   ├── models/
-│   │   ├── __init__.py
-│   │   ├── baseline.py     # Random Forest empirical benchmark model
-│   │   ├── graph_encoder.py # [Phase 2] Spatial GNN Encoder
-│   │   ├── graph_transformer.py # [Phase 2/3] Global Graph Transformer
-│   │   └── autoencoder.py  # [Phase 2/3] Graph Autoencoder (GTAE)
-│   ├── training/
-│   │   ├── __init__.py
-│   │   ├── train_baseline.py # Baseline training, evaluation, and artifact exporter
-│   │   └── train_gtae.py   # [Phase 3] GTAE model training pipeline
-│   ├── detection/
-│   │   ├── __init__.py
-│   │   ├── detector.py     # Anomaly detector engine
-│   │   ├── risk_engine.py  # Threat risk scoring engine
-│   │   └── inference.py    # Unified end-to-end inference API
-│   └── explainability/
-│       ├── __init__.py
-│       └── explainer.py    # Explainability engine (Ablation & Reconstruction XAI)
-├── dashboard/
-│   └── app.py              # [Phase 6] Streamlit monitoring dashboard
-├── tests/                  # Pytest test suite
-├── models/                 # Serialized model weights and preprocessors (.joblib/.pt)
+
+### Running Tests
+
+The project includes an extensive test suite validating the entire pipeline (data, models, detection, risk, explainability).
+```bash
+python -m pytest tests -q
+```
+
+## Model Artifacts
+
+Pre-trained model artifacts required to run the dashboard are included in the repository:
+- `models/gtae_ids.pt`: Normal production model weights
+- `models/gtae_config.json`: Production model configuration
+- `models/preprocessor.joblib`: Scaler and graph builder state
+
+### Zero-Day Experiment
+
+The repository also includes artifacts for a **Zero-Day/Held-Out Experiment** under `results/zero_day_experiment/`. 
+- **Methodology:** The model was trained entirely without samples from the **Infiltration** attack class. 
+- **Goal:** To demonstrate the system's ability to detect novel, unseen attacks purely through reconstruction-based anomaly detection.
+- **Separation:** The zero-day checkpoint is independent and does *not* replace or overwrite the normal production checkpoint (`models/gtae_ids.pt`).
+
+## Current Verified Results
+- **Pytest:** 55/55 tests passing cleanly.
+- **Dashboard UI:** 7 comprehensive tabs running optimally via Streamlit.
+
+## Directory Structure
+```
+xai-nids/
+├── dashboard/               # Streamlit application UI and rendering logic
+├── data/                    # Dataset storage (raw data not tracked)
+├── models/                  # Production model checkpoints and preprocessors
+├── notebooks/               # Exploratory and prototyping Jupyter notebooks
 ├── results/
-│   ├── figures/            # High-resolution confusion matrices & plots
-│   └── metrics/            # Evaluation metrics JSON & classification reports
-├── notebooks/              # Exploratory data analysis notebooks
-├── requirements.txt
+│   └── zero_day_experiment/ # Independent held-out model artifacts
+├── src/                     # Core library
+│   ├── data/                # Data loading and preprocessing pipelines
+│   ├── detection/           # Inference API and risk engine
+│   ├── explainability/      # Feature importance and ablation engine
+│   └── models/              # PyTorch graph transformer definitions
+├── tests/                   # Unit and integration test suite
+├── .gitignore
 ├── README.md
-└── .gitignore
+└── requirements.txt
 ```
-
----
-
-## ⚙️ Hardware Environment
-
-| Component | Specification |
-|---|---|
-| **Python** | `3.11.9` |
-| **GPU** | NVIDIA GeForce RTX 3060 Laptop GPU (6 GB VRAM) |
-| **CUDA Driver** | `596.36` (Supports CUDA 13.2) |
-| **PyTorch** | `2.6.0+cu124` |
-| **PyTorch Geometric** | `2.8.0.post1` |
-
----
-
-## 🚀 Getting Started (Phase 1)
-
-### 1. Inspect Hardware & CUDA Status
-
-Run the environment utility to verify CPU, GPU, VRAM, and PyTorch CUDA availability:
-
-```bash
-python -m src.utils.gpu_info
-```
-
-### 2. Dataset Setup
-
-Place the official CIC-IDS2017 Parquet files into the `data/raw/` directory:
-
-- `Benign-Monday-no-metadata.parquet`
-- `Bruteforce-Tuesday-no-metadata.parquet`
-- `DoS-Wednesday-no-metadata.parquet`
-- `WebAttacks-Thursday-no-metadata.parquet`
-- `Infiltration-Thursday-no-metadata.parquet`
-- `DDoS-Friday-no-metadata.parquet`
-- `Botnet-Friday-no-metadata.parquet`
-- `Portscan-Friday-no-metadata.parquet`
-
-*(Note: If raw dataset files are not yet in `data/raw/`, the data loader automatically generates a compliant synthetic CIC-IDS2017 sample dataset in `data/samples/` to enable end-to-end local testing and pipeline validation).*
-
-### 3. Run Phase 1 Baseline Training
-
-Train the Random Forest baseline model, evaluate on unseen test data, and export metrics:
-
-```bash
-# Binary classification (BENIGN vs ATTACK)
-python -m src.training.train_baseline --mode binary --sample_size 25000
-
-# Multiclass classification (BENIGN, DoS, DDoS, PortScan, etc.)
-python -m src.training.train_baseline --mode multiclass --sample_size 25000
-```
-
-### 4. Run Automated Test Suite
-
-Execute all unit and integration tests:
-
-```bash
-pytest tests/ -v
-```
-
----
-
-## 📊 Phase 1 Deliverables
-
-- **Model Artifact**: `models/baseline_rf.joblib`
-- **Fitted Preprocessor**: `models/preprocessor.joblib`
-- **Metrics Summary**: `results/metrics/baseline_metrics.json`
-- **Text Classification Report**: `results/metrics/baseline_classification_report.txt`
-- **Confusion Matrix Heatmap**: `results/figures/baseline_confusion_matrix.png`
-
----
-
-## 🗺️ Project Roadmap
-
-- [x] **Phase 1: Project Foundation & Baseline Pipeline**
-- [x] **Phase 2: Graph Construction & GNN Architecture**
-- [x] **Phase 3: Graph Transformer Autoencoder (GTAE-IDS) Training**
-- [x] **Phase 4: Real-time Detection & Threat Risk Engine**
-- [x] **Phase 5: Explainable AI Engine (Ablation & Reconstruction XAI)**
-- [ ] **Phase 6: Interactive Streamlit Dashboard & End-to-End Evaluation**

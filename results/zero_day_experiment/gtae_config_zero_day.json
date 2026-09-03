@@ -1,0 +1,21 @@
+{
+    "model_architecture": "GTAE_IDS",
+    "encoder_type": "transformer",
+    "in_features": 67,
+    "num_classes": 8,
+    "hidden_dim": 128,
+    "latent_dim": 64,
+    "num_heads": 4,
+    "num_encoder_layers": 2,
+    "dropout": 0.2,
+    "loss_type": "mse",
+    "lambda_rec": 0.5,
+    "training_mode": "supervised_hybrid",
+    "graph_size": 1000,
+    "k_neighbors": 5,
+    "epochs": 5,
+    "learning_rate": 0.001,
+    "anomaly_percentile": 95.0,
+    "anomaly_threshold": 4.360150337219238,
+    "holdout_class": "Infiltration"
+}

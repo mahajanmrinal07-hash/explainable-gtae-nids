@@ -12,6 +12,7 @@ import json
 import os
 import platform
 import queue
+import struct
 import sys
 import time
 from collections import Counter
@@ -22,7 +23,7 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 import numpy as np
 import pandas as pd
 import psutil
-from nfstream import NFStreamer
+from nfstream import NFPlugin, NFStreamer
 from nfstream.meter import meter_workflow
 from nfstream.system import match_flow_conn
 from nfstream.utils import NFEvent, NFMode, set_affinity
@@ -114,15 +115,11 @@ CIC_67_FEATURES: List[str] = [
     "Idle Min",
 ]
 
-# Features that cannot be natively measured by NFStream flow slots and are imputed
+# Features that cannot be natively measured by NFStream and are imputed
 # via Preprocessor training medians rather than fabricating data.
+# (Note: Header lengths, window bytes, active data packets, and min segment size
+# are now dynamically measured per-packet via CICFeaturePlugin).
 UNAVAILABLE_CIC_FEATURES: Dict[str, str] = {
-    "Init Fwd Win Bytes": "Initial TCP window size is not exposed in NFStream flow slots",
-    "Init Bwd Win Bytes": "Initial TCP window size is not exposed in NFStream flow slots",
-    "Fwd Header Length": "Cumulative IP/TCP header byte total is not tracked in NFStream flow slots",
-    "Bwd Header Length": "Cumulative IP/TCP header byte total is not tracked in NFStream flow slots",
-    "Fwd Act Data Packets": "Count of packets with payload > 0 is not directly metered in NFStream",
-    "Fwd Seg Size Min": "Minimum forward segment size is not directly metered in NFStream",
     "Active Mean": "Active burst duration statistics require micro-interval connection state machines",
     "Active Std": "Active burst duration statistics require micro-interval connection state machines",
     "Active Max": "Active burst duration statistics require micro-interval connection state machines",
@@ -405,6 +402,94 @@ class TimedNFStreamer(NFStreamer):
 
 
 # -----------------------------------------------------------------------------
+# TCP Window Extraction & Dynamic Feature Measurement Plugin
+# -----------------------------------------------------------------------------
+def extract_tcp_window(packet: Any) -> Optional[float]:
+    """
+    Extracts the 16-bit TCP advertised window size from a SYN packet's IP payload.
+    Returns None if packet is malformed, truncated, or not IPv4/IPv6 TCP.
+    """
+    ip_pkt = getattr(packet, "ip_packet", None)
+    if not ip_pkt or len(ip_pkt) < 20:
+        return None
+
+    try:
+        ip_ver = getattr(packet, "ip_version", 4)
+        if ip_ver == 6:
+            ip_header_len = 40
+        else:
+            ip_header_len = (ip_pkt[0] & 0x0F) * 4
+
+        if len(ip_pkt) >= ip_header_len + 16:
+            window = struct.unpack("!H", ip_pkt[ip_header_len + 14 : ip_header_len + 16])[0]
+            return float(window)
+    except (IndexError, struct.error, TypeError):
+        pass
+
+    return None
+
+
+class CICFeaturePlugin(NFPlugin):
+    """
+    NFStream plugin to dynamically measure per-flow CIC-IDS2017 features
+    that are not natively tracked in standard NFlow summary slots:
+      - Fwd Header Length (cumulative across forward packets)
+      - Bwd Header Length (cumulative across backward packets)
+      - Init Fwd Win Bytes (TCP forward SYN window)
+      - Init Bwd Win Bytes (TCP backward SYN/SYN-ACK window)
+      - Fwd Act Data Packets (forward packets with payload_size > 0)
+      - Fwd Seg Size Min (minimum transport header size in forward direction)
+    """
+
+    def on_init(self, packet: Any, flow: Any) -> None:
+        flow.udps.fwd_header_len = 0.0
+        flow.udps.bwd_header_len = 0.0
+        flow.udps.init_fwd_win_bytes = None
+        flow.udps.init_bwd_win_bytes = None
+        flow.udps.fwd_act_data_packets = 0.0
+        flow.udps.fwd_seg_size_min = None
+        self._process_packet(packet, flow)
+
+    def on_update(self, packet: Any, flow: Any) -> None:
+        self._process_packet(packet, flow)
+
+    def _process_packet(self, packet: Any, flow: Any) -> None:
+        direction = getattr(packet, "direction", 0)
+        ip_sz = float(getattr(packet, "ip_size", 0.0))
+        pay_sz = float(getattr(packet, "payload_size", 0.0))
+        hdr_sz = max(0.0, ip_sz - pay_sz)
+
+        if direction == 0:
+            flow.udps.fwd_header_len += hdr_sz
+            if pay_sz > 0:
+                flow.udps.fwd_act_data_packets += 1.0
+
+            trans_sz = float(getattr(packet, "transport_size", 0.0))
+            seg_sz = max(0.0, trans_sz - pay_sz)
+            if seg_sz > 0:
+                if (
+                    flow.udps.fwd_seg_size_min is None
+                    or seg_sz < flow.udps.fwd_seg_size_min
+                ):
+                    flow.udps.fwd_seg_size_min = seg_sz
+        else:
+            flow.udps.bwd_header_len += hdr_sz
+
+        # TCP initial window extraction
+        protocol = getattr(packet, "protocol", 0)
+        if protocol == 6 and getattr(packet, "syn", 0):
+            win = extract_tcp_window(packet)
+            if win is not None:
+                if direction == 0 and flow.udps.init_fwd_win_bytes is None:
+                    flow.udps.init_fwd_win_bytes = win
+                elif direction == 1 and flow.udps.init_bwd_win_bytes is None:
+                    flow.udps.init_bwd_win_bytes = win
+
+    def on_expire(self, flow: Any) -> None:
+        pass
+
+
+# -----------------------------------------------------------------------------
 # NFStream Flow to 67-Feature CIC-IDS2017 Mapping
 # -----------------------------------------------------------------------------
 def map_nflow_to_cic_features(flow: Any) -> Dict[str, float]:
@@ -412,8 +497,10 @@ def map_nflow_to_cic_features(flow: Any) -> Dict[str, float]:
     Converts an NFStream NFlow object into the exact 67-feature schema required
     by the XAI-NIDS Preprocessor.
 
-    Features that cannot be measured natively by NFStream are assigned np.nan so
-    that the Preprocessor can impute them strictly with its fitted training medians.
+    Derives features dynamically via CICFeaturePlugin measurements where available,
+    applying protocol-aware fallbacks for missing handshakes or non-TCP flows.
+    Remaining unmetered features (active/idle statistics) are assigned np.nan for
+    Preprocessor training median imputation.
 
     Args:
         flow: NFStream NFlow instance or mock flow object.
@@ -421,6 +508,8 @@ def map_nflow_to_cic_features(flow: Any) -> Dict[str, float]:
     Returns:
         Dictionary mapping all 67 feature names to their numeric float values.
     """
+    protocol = int(getattr(flow, "protocol", 0))
+
     # 1. Base counts and duration (NFStream uses ms; CIC-IDS2017 uses microseconds)
     duration_ms = float(getattr(flow, "bidirectional_duration_ms", 0.0))
     duration_us = duration_ms * 1000.0
@@ -450,9 +539,72 @@ def map_nflow_to_cic_features(flow: Any) -> Dict[str, float]:
     b_stddev_ps = float(getattr(flow, "bidirectional_stddev_ps", 0.0))
     packet_length_variance = b_stddev_ps**2
 
+    # Plugin-extracted or protocol-aware features
+    udps = getattr(flow, "udps", None)
+
+    # 1. Fwd Header Length
+    if udps is not None and getattr(udps, "fwd_header_len", None) is not None:
+        fwd_header_length = float(udps.fwd_header_len)
+    else:
+        fwd_header_length = (
+            total_fwd_pkts * (32.0 if protocol == 6 else 28.0)
+            if total_fwd_pkts > 0
+            else 0.0
+        )
+
+    # 2. Bwd Header Length
+    if udps is not None and getattr(udps, "bwd_header_len", None) is not None:
+        bwd_header_length = float(udps.bwd_header_len)
+    else:
+        bwd_header_length = (
+            total_bwd_pkts * (32.0 if protocol == 6 else 28.0)
+            if total_bwd_pkts > 0
+            else 0.0
+        )
+
+    # 3. Init Fwd Win Bytes (-1.0 for non-TCP; SYN advertised window or fallback for TCP)
+    if protocol != 6:
+        init_fwd_win_bytes = -1.0
+    else:
+        if udps is not None and getattr(udps, "init_fwd_win_bytes", None) is not None:
+            init_fwd_win_bytes = float(udps.init_fwd_win_bytes)
+        else:
+            init_fwd_win_bytes = 1834.5  # Training-compatible TCP fallback
+
+    # 4. Init Bwd Win Bytes (-1.0 for non-TCP; SYN-ACK advertised window or fallback for TCP)
+    if protocol != 6:
+        init_bwd_win_bytes = -1.0
+    else:
+        if udps is not None and getattr(udps, "init_bwd_win_bytes", None) is not None:
+            init_bwd_win_bytes = float(udps.init_bwd_win_bytes)
+        else:
+            init_bwd_win_bytes = 131.0  # Training-compatible TCP fallback
+
+    # 5. Fwd Act Data Packets (forward packets with payload > 0)
+    if udps is not None and getattr(udps, "fwd_act_data_packets", None) is not None:
+        fwd_act_data_packets = float(udps.fwd_act_data_packets)
+    else:
+        if protocol != 6:
+            fwd_act_data_packets = total_fwd_pkts
+        else:
+            fwd_act_data_packets = (
+                max(1.0, total_fwd_pkts - 2.0) if total_fwd_pkts > 2 else total_fwd_pkts
+            )
+
+    # 6. Fwd Seg Size Min (minimum transport header size in forward direction)
+    if udps is not None and getattr(udps, "fwd_seg_size_min", None) is not None:
+        fwd_seg_size_min = float(udps.fwd_seg_size_min)
+    else:
+        if protocol == 6:
+            fwd_seg_size_min = 32.0
+        elif protocol == 17:
+            fwd_seg_size_min = 20.0
+        else:
+            fwd_seg_size_min = 20.0
+
     # Map features
     features: Dict[str, float] = {
-        "Protocol": float(getattr(flow, "protocol", 0)),
+        "Protocol": float(protocol),
         "Flow Duration": duration_us,
         "Total Fwd Packets": total_fwd_pkts,
         "Total Backward Packets": total_bwd_pkts,
@@ -483,8 +635,8 @@ def map_nflow_to_cic_features(flow: Any) -> Dict[str, float]:
         "Bwd IAT Max": float(getattr(flow, "dst2src_max_piat_ms", 0.0)) * 1000.0,
         "Bwd IAT Min": float(getattr(flow, "dst2src_min_piat_ms", 0.0)) * 1000.0,
         "Fwd PSH Flags": float(getattr(flow, "src2dst_psh_packets", 0)),
-        "Fwd Header Length": np.nan,
-        "Bwd Header Length": np.nan,
+        "Fwd Header Length": fwd_header_length,
+        "Bwd Header Length": bwd_header_length,
         "Fwd Packets/s": fwd_pkts_per_sec,
         "Bwd Packets/s": bwd_pkts_per_sec,
         "Packet Length Min": float(getattr(flow, "bidirectional_min_ps", 0.0)),
@@ -507,10 +659,10 @@ def map_nflow_to_cic_features(flow: Any) -> Dict[str, float]:
         "Subflow Fwd Bytes": total_fwd_bytes,
         "Subflow Bwd Packets": total_bwd_pkts,
         "Subflow Bwd Bytes": total_bwd_bytes,
-        "Init Fwd Win Bytes": np.nan,
-        "Init Bwd Win Bytes": np.nan,
-        "Fwd Act Data Packets": np.nan,
-        "Fwd Seg Size Min": np.nan,
+        "Init Fwd Win Bytes": init_fwd_win_bytes,
+        "Init Bwd Win Bytes": init_bwd_win_bytes,
+        "Fwd Act Data Packets": fwd_act_data_packets,
+        "Fwd Seg Size Min": fwd_seg_size_min,
         "Active Mean": np.nan,
         "Active Std": np.nan,
         "Active Max": np.nan,
@@ -594,7 +746,7 @@ def run_live_capture(
         device=device,
     )
 
-    # 2. Start Timed NFStreamer
+    # 2. Start Timed NFStreamer with dynamic CIC feature measurement plugin
     streamer = TimedNFStreamer(
         source=interface,
         duration=duration,
@@ -602,6 +754,7 @@ def run_live_capture(
         active_timeout=active_timeout,
         statistical_analysis=True,
         bpf_filter=bpf_filter,
+        udps=[CICFeaturePlugin()],
         n_meters=1,
     )
 

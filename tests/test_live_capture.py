@@ -7,6 +7,7 @@ pipeline execution offline without requiring live network traffic.
 from pathlib import Path
 from types import SimpleNamespace
 from typing import Any
+import struct
 import numpy as np
 import pandas as pd
 import pytest
@@ -17,7 +18,9 @@ from src.preprocessing import Preprocessor
 from tools.live_capture import (
     CIC_67_FEATURES,
     UNAVAILABLE_CIC_FEATURES,
+    CICFeaturePlugin,
     extract_flow_metadata,
+    extract_tcp_window,
     get_available_interfaces,
     map_nflow_to_cic_features,
     resolve_interface,
@@ -247,3 +250,173 @@ def test_interface_enumeration_and_resolution():
     # Test resolving by invalid name raises ValueError
     with pytest.raises(ValueError):
         resolve_interface("NonExistentInterface_123456789")
+
+
+# -----------------------------------------------------------------------------
+# Tests for Dynamic CIC-IDS2017 Feature Extraction & CICFeaturePlugin
+# -----------------------------------------------------------------------------
+class MockPacket:
+    """Mock NFStream packet matching pythonize_packet fields."""
+
+    def __init__(
+        self,
+        direction: int = 0,
+        ip_size: float = 1500.0,
+        transport_size: float = 1480.0,
+        payload_size: float = 1448.0,
+        protocol: int = 6,
+        ip_version: int = 4,
+        syn: int = 0,
+        ip_packet: bytes = None,
+    ):
+        self.direction = direction
+        self.ip_size = ip_size
+        self.transport_size = transport_size
+        self.payload_size = payload_size
+        self.protocol = protocol
+        self.ip_version = ip_version
+        self.syn = syn
+        self.ip_packet = ip_packet
+
+
+def test_forward_backward_header_accumulation():
+    """Verify forward and backward header length accumulation via CICFeaturePlugin."""
+    plugin = CICFeaturePlugin()
+    flow = SimpleNamespace(udps=SimpleNamespace())
+
+    # Packet 1 (fwd): ip_size=100, payload_size=60 -> header = 40
+    pkt1 = MockPacket(direction=0, ip_size=100.0, transport_size=80.0, payload_size=60.0)
+    plugin.on_init(pkt1, flow)
+
+    # Packet 2 (fwd): ip_size=1500, payload_size=1460 -> header = 40
+    pkt2 = MockPacket(direction=0, ip_size=1500.0, transport_size=1480.0, payload_size=1460.0)
+    plugin.on_update(pkt2, flow)
+
+    # Packet 3 (bwd): ip_size=200, payload_size=148 -> header = 52
+    pkt3 = MockPacket(direction=1, ip_size=200.0, transport_size=180.0, payload_size=148.0)
+    plugin.on_update(pkt3, flow)
+
+    assert flow.udps.fwd_header_len == 80.0  # 40 + 40
+    assert flow.udps.bwd_header_len == 52.0  # 52
+
+
+def test_tcp_initial_window_extraction():
+    """Verify advertised TCP window is correctly parsed from raw IPv4 and IPv6 SYN packets."""
+    # 1. IPv4 SYN with window size 64240
+    ip_hdr_v4 = bytearray(20)
+    ip_hdr_v4[0] = 0x45  # IPv4, IHL=5 (20 bytes)
+    ip_hdr_v4[9] = 6    # Protocol TCP
+    tcp_hdr_v4 = bytearray(20)
+    struct.pack_into("!H", tcp_hdr_v4, 14, 64240)  # Offset 14-15 = Window
+    pkt_v4 = MockPacket(
+        direction=0,
+        protocol=6,
+        ip_version=4,
+        syn=1,
+        ip_packet=bytes(ip_hdr_v4 + tcp_hdr_v4),
+    )
+
+    win_v4 = extract_tcp_window(pkt_v4)
+    assert win_v4 == 64240.0
+
+    # 2. IPv6 SYN with window size 28960
+    ip_hdr_v6 = bytearray(40)
+    ip_hdr_v6[0] = 0x60  # IPv6
+    tcp_hdr_v6 = bytearray(20)
+    struct.pack_into("!H", tcp_hdr_v6, 14, 28960)
+    pkt_v6 = MockPacket(
+        direction=1,
+        protocol=6,
+        ip_version=6,
+        syn=1,
+        ip_packet=bytes(ip_hdr_v6 + tcp_hdr_v6),
+    )
+
+    win_v6 = extract_tcp_window(pkt_v6)
+    assert win_v6 == 28960.0
+
+    # 3. Truncated packet returns None safely
+    pkt_short = MockPacket(direction=0, protocol=6, ip_version=4, syn=1, ip_packet=b"\x45\x00")
+    assert extract_tcp_window(pkt_short) is None
+
+
+def test_non_tcp_initial_window_is_minus_one():
+    """Verify non-TCP protocols (UDP, QUIC, IGMP) strictly set initial window bytes to -1.0."""
+    # UDP / QUIC (Protocol 17)
+    udp_flow = MockNFlow(protocol=17)
+    features_udp = map_nflow_to_cic_features(udp_flow)
+    assert features_udp["Init Fwd Win Bytes"] == -1.0
+    assert features_udp["Init Bwd Win Bytes"] == -1.0
+
+    # IGMP (Protocol 2)
+    igmp_flow = MockNFlow(protocol=2)
+    features_igmp = map_nflow_to_cic_features(igmp_flow)
+    assert features_igmp["Init Fwd Win Bytes"] == -1.0
+    assert features_igmp["Init Bwd Win Bytes"] == -1.0
+
+
+def test_forward_active_data_packet_counting():
+    """Verify forward active data packet counts only packets carrying non-zero payload."""
+    plugin = CICFeaturePlugin()
+    flow = SimpleNamespace(udps=SimpleNamespace())
+
+    # Packet 1 (fwd): SYN control packet (payload_size = 0)
+    pkt1 = MockPacket(direction=0, payload_size=0.0)
+    plugin.on_init(pkt1, flow)
+
+    # Packet 2 (fwd): Data packet (payload_size = 500)
+    pkt2 = MockPacket(direction=0, payload_size=500.0)
+    plugin.on_update(pkt2, flow)
+
+    # Packet 3 (fwd): ACK keepalive packet (payload_size = 0)
+    pkt3 = MockPacket(direction=0, payload_size=0.0)
+    plugin.on_update(pkt3, flow)
+
+    # Packet 4 (bwd): Return data (direction = 1, should not increment fwd counter)
+    pkt4 = MockPacket(direction=1, payload_size=1000.0)
+    plugin.on_update(pkt4, flow)
+
+    assert flow.udps.fwd_act_data_packets == 1.0
+
+
+def test_forward_segment_minimum():
+    """Verify minimum forward segment size (transport_size - payload_size) is tracked."""
+    plugin = CICFeaturePlugin()
+    flow = SimpleNamespace(udps=SimpleNamespace())
+
+    # Packet 1 (fwd): transport_size=40, payload_size=0 -> seg_sz = 40
+    pkt1 = MockPacket(direction=0, transport_size=40.0, payload_size=0.0)
+    plugin.on_init(pkt1, flow)
+
+    # Packet 2 (fwd): transport_size=1020, payload_size=1000 -> seg_sz = 20
+    pkt2 = MockPacket(direction=0, transport_size=1020.0, payload_size=1000.0)
+    plugin.on_update(pkt2, flow)
+
+    # Packet 3 (fwd): transport_size=532, payload_size=500 -> seg_sz = 32
+    pkt3 = MockPacket(direction=0, transport_size=532.0, payload_size=500.0)
+    plugin.on_update(pkt3, flow)
+
+    assert flow.udps.fwd_seg_size_min == 20.0
+
+
+def test_handshake_missing_fallback_behavior():
+    """Verify robust fallback behavior when handshake packets (SYN/SYN-ACK) are unobserved."""
+    # Flow with plugin udps but no observed SYN or SYN-ACK
+    tcp_flow = MockNFlow(protocol=6, src2dst_pkts=5, dst2src_pkts=5)
+    tcp_flow.udps = SimpleNamespace(
+        fwd_header_len=160.0,
+        bwd_header_len=160.0,
+        init_fwd_win_bytes=None,  # SYN missed
+        init_bwd_win_bytes=None,  # SYN-ACK missed
+        fwd_act_data_packets=3.0,
+        fwd_seg_size_min=32.0,
+    )
+
+    features = map_nflow_to_cic_features(tcp_flow)
+
+    assert features["Fwd Header Length"] == 160.0
+    assert features["Bwd Header Length"] == 160.0
+    assert features["Init Fwd Win Bytes"] == 1834.5  # Training-compatible TCP fallback
+    assert features["Init Bwd Win Bytes"] == 131.0   # Training-compatible TCP fallback
+    assert features["Fwd Act Data Packets"] == 3.0
+    assert features["Fwd Seg Size Min"] == 32.0

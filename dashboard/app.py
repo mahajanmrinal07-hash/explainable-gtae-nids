@@ -22,6 +22,7 @@ from src.config import GPU_CONFIG, MULTICLASS_INDEX_TO_NAME
 from src.detection.inference import InferenceAPI
 from src.explainability.explainer import IntrusionExplainer
 from dashboard.evaluation import evaluate_predictions
+from dashboard.live_monitoring import render_live_monitoring
 
 
 # ============================================================
@@ -1151,6 +1152,7 @@ def main():
             "XAI",
             "Model Information",
             "Zero-Day Experiment",
+            "Live Monitoring",
         ]
     )
 
@@ -1248,6 +1250,10 @@ def main():
     with tabs[6]:
 
         render_zero_day_experiment()
+
+    with tabs[7]:
+
+        render_live_monitoring()
 
 
 if __name__ == "__main__":
